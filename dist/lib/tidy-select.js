@@ -4,14 +4,17 @@ class TidySelect extends HTMLElement {
         this.element = this.attachShadow({ mode: 'open' });
     }
     connectedCallback() {
-        var _a;
-        this.render();
-        this.setAttribute('value', '');
-        this.observer = new MutationObserver(() => this.reset());
-        this.observer.observe(this, { childList: true, subtree: true });
-        (_a = document.querySelector('html')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', this.closeAll);
+        setTimeout(() => {
+            var _a;
+            this.setAttribute('value', '');
+            this.render();
+            this.observer = new MutationObserver(() => this.reset());
+            this.observer.observe(this, { childList: true, subtree: true });
+            (_a = document.querySelector('html')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', this.closeAll);
+        }, 0);
     }
     render() {
+        this.createInput();
         this.createControl();
         this.element.appendChild(this.control);
         this.applyCss();
@@ -44,23 +47,51 @@ class TidySelect extends HTMLElement {
         return this.control.classList.contains('open');
     }
     select(ev) {
-        let option;
         const target = ev.currentTarget;
         const value = target.dataset.value || '';
-        const options = this.querySelectorAll('option');
-        for (const selectOption of options.entries()) {
-            if (selectOption[1].value === value) {
-                option = selectOption[1];
-                break;
-            }
-        }
-        this.setAttribute('value', value);
+        this.selectFromValue(value);
         this.dispatchEvent(new InputEvent('change'));
-        this.valueText.textContent = (option === null || option === void 0 ? void 0 : option.textContent) || '';
         this.close();
+    }
+    selectFromValue(value) {
+        if (!value)
+            return;
+        const option = this.findOption(value);
+        this.input.setAttribute('value', value);
+        this.setAttribute('value', value);
+        this.valueText.textContent = (option === null || option === void 0 ? void 0 : option.textContent) || '';
+        this.selectOptions.forEach(option => {
+            if (option.getAttribute('data-value') === value) {
+                option.setAttribute('class', 'selected');
+            }
+            else {
+                option.removeAttribute('class');
+            }
+        });
+    }
+    findOption(value) {
+        let option = null;
+        const options = this.querySelectorAll('option');
+        options.forEach(selectOption => {
+            if (selectOption.value === value) {
+                option = selectOption;
+                selectOption.setAttribute('tidy-selected', 'tidy-selected');
+            }
+            else {
+                selectOption.removeAttribute('tidy-selected');
+            }
+        });
+        return option;
     }
     stopPropagation(ev) {
         ev.stopPropagation();
+    }
+    createInput() {
+        this.input = document.createElement('input');
+        this.input.setAttribute('name', this.name);
+        this.input.setAttribute('value', this.value);
+        this.input.style.display = 'none';
+        this.appendChild(this.input);
     }
     createControl() {
         this.control = document.createElement('div');
@@ -72,19 +103,16 @@ class TidySelect extends HTMLElement {
     }
     createValueElement() {
         this.valueElement = document.createElement('a');
-        this.valueText = document.createElement('span');
         this.valueElement.setAttribute('class', 'ts-dropdown');
-        this.valueText.textContent = this.placeholder;
-        this.valueText.setAttribute('class', 'ts-current-value');
-        this.valueElement.appendChild(this.valueText);
+        this.valueElement.textContent = this.placeholder;
     }
     createPopover() {
         this.popover = document.createElement('div');
         this.list = document.createElement('ul');
-        this.createChildNodes();
+        const children = this.createChildNodes();
         this.popover.setAttribute('class', 'ts-popover');
         this.list.setAttribute('class', 'ts-options');
-        this.list.appendChild(this.selectOptions);
+        this.list.appendChild(children);
         this.popover.appendChild(this.list);
     }
     createChildNodes() {
@@ -102,9 +130,16 @@ class TidySelect extends HTMLElement {
                 desc.textContent = option.getAttribute('data-description');
                 item.appendChild(desc);
             }
+            if (option.hasAttribute('tidy-selected')) {
+                item.setAttribute('class', 'selected');
+                this.input.setAttribute('value', option.value);
+                this.setAttribute('value', option.value);
+                this.valueElement.textContent = option.textContent;
+            }
             frag.appendChild(item);
         });
-        this.selectOptions = frag;
+        this.selectOptions = frag.querySelectorAll('li');
+        return frag;
     }
     applyCss() {
         const style = document.createElement('style');
@@ -112,10 +147,10 @@ class TidySelect extends HTMLElement {
         this.element.appendChild(style);
     }
     get name() {
-        return this.getAttribute('name');
+        return this.getAttribute('name') || '';
     }
     get value() {
-        return this.getAttribute('value');
+        return this.getAttribute('value') || '';
     }
     get placeholder() {
         return this.getAttribute('placeholder') || 'Choose an item...';
@@ -124,36 +159,32 @@ class TidySelect extends HTMLElement {
         return `
 .ts-control {
   position: relative;
-  width: 400px;
+  width: var(--width, 400px);
   background-color: #FFFFFF;
   margin-bottom: 0.75em;
 }
-
 .open .ts-dropdown {
   box-shadow: none;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  border-color: gray;
+  border-color: var(--border-color, gray);
   border-bottom: none;
 }
-
 .ts-dropdown {
-  border-radius: 6px;
+  border-radius: var(--border-radius, 6px);
   box-sizing: border-box;
-
   display: block;
   position: relative;
-  padding: 12px 35px 12px 15px;
+  padding: var(--input-padding, 12px 35px 12px 15px);
   width: 100%;
   font-weight: 400;
-  border: 1px solid gray;
-  border-bottom-color: gray;
-  color: $brand-brown;
+  border: 1px solid var(--border-color, gray);
+  border-bottom-color: var(--border-color, gray);
+  color: var(--color, darkgray);
   font-size: 16px;
-  line-height: 16px;
+  line-height: var(--input-line-height, 16px);
   cursor: pointer;
 }
-
 .ts-dropdown::after {
   content: "";
   display: block;
@@ -163,7 +194,7 @@ class TidySelect extends HTMLElement {
   right: 12px;
   width: 0;
   height: 0;
-  border-top: 6px solid gray;
+  border-top: 6px solid var(--border-color, gray);
   border-bottom: 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
@@ -171,9 +202,8 @@ class TidySelect extends HTMLElement {
 .ts-popover {
   box-sizing: border-box;
   box-shadow: 0 2px 3px rgba(0,0,0,0.24);
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
-
+  border-bottom-left-radius: var(--border-radius, 6px);
+  border-bottom-right-radius: var(--border-radius, 6px);
   display: none;
   position: absolute;
   padding: 0;
@@ -181,52 +211,52 @@ class TidySelect extends HTMLElement {
   right: 0;
   width: 100%;
   max-height: 400px;
-  border: 1px solid gray;
+  border: 1px solid var(--border-color, gray);
   border-top: none;
-  border-bottom-color: gray;
+  border-bottom-color: var(--border-color, gray);
   background-color: #fff;
   background-color: rgba(255,255,255,0.95);
   z-index: 1000;
   cursor: auto;
   overflow-y: auto;
 }
-
 .open .ts-popover {
   display: block;
 }
-
 .ts-options {
   list-style-type: none;
   margin: 0;
   padding: 0;
   cursor: pointer;
 }
-
 li {
   padding: 12px 15px;
   border-bottom: 1px solid lightgray;
 }
-
 li:hover {
   background-color: #fafafa;
 }
-
 li.selected {
   background-color: #fafafa;
 }
-
 .ts-title {
   display: block;
   font-size: 14px;
   line-height: 20px;
   color: #444;
 }
-
 .ts-description {
   display: block;
   padding-top: 4px;
   font-size: 13px;
   color: #888;
+}
+.ts-current-value {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  display: inline-block;
 }`;
     }
 }
