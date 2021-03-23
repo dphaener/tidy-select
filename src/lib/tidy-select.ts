@@ -5,7 +5,6 @@ class TidySelect extends HTMLElement {
   popover: HTMLElement
   list: HTMLElement
   valueElement: HTMLElement
-  valueText: HTMLElement
   selectOptions: NodeListOf<HTMLLIElement>
   input: HTMLInputElement
 
@@ -94,7 +93,7 @@ class TidySelect extends HTMLElement {
 
     this.input.setAttribute('value', value);
     this.setAttribute('value', value);
-    this.valueText.textContent = option?.textContent || '';
+    this.valueElement.textContent = option?.textContent || '';
 
     this.selectOptions.forEach(option => {
       if (option.getAttribute('data-value') === value) {

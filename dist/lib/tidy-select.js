@@ -59,7 +59,7 @@ class TidySelect extends HTMLElement {
         const option = this.findOption(value);
         this.input.setAttribute('value', value);
         this.setAttribute('value', value);
-        this.valueText.textContent = (option === null || option === void 0 ? void 0 : option.textContent) || '';
+        this.valueElement.textContent = (option === null || option === void 0 ? void 0 : option.textContent) || '';
         this.selectOptions.forEach(option => {
             if (option.getAttribute('data-value') === value) {
                 option.setAttribute('class', 'selected');
