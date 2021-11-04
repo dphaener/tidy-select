@@ -25,10 +25,15 @@ class TidySelect extends HTMLElement {
       this.render();
 
       this.observer = new MutationObserver(() => this.reset());
+      this.attachMutationObserver();
       this.observer.observe(this, {childList: true, subtree: true});
 
       document.querySelector('html')?.addEventListener('click', this.closeAll);
     }, 0);
+  }
+
+  attachMutationObserver() {
+      this.observer.observe(this, { childList: true, subtree: true });
   }
 
   render() {
@@ -45,10 +50,11 @@ class TidySelect extends HTMLElement {
   }
 
   reset() {
+    this.observer.disconnect();
     this.element.innerHTML = '';
     this.setAttribute('value', '');
-
     this.render();
+    this.attachMutationObserver();
   }
 
   toggle(ev: Event) {
@@ -83,6 +89,7 @@ class TidySelect extends HTMLElement {
 
     this.selectFromValue(value);
     this.dispatchEvent(new InputEvent('change'));
+    this.dispatchEvent(new InputEvent('blur'));
     this.close();
   }
 
