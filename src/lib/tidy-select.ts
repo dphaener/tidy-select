@@ -328,6 +328,8 @@ li.selected {
   }
 }
 
-customElements.define('tidy-select', TidySelect);
+if (customElements.get('tidy-select') === undefined) {
+  customElements.define('tidy-select', TidySelect);
+}
 
 export {TidySelect};
