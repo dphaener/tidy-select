@@ -33,7 +33,7 @@ class TidySelect extends HTMLElement {
   }
 
   attachMutationObserver() {
-      this.observer.observe(this, { childList: true, subtree: true });
+    this.observer.observe(this, { childList: true, subtree: true });
   }
 
   render() {
@@ -228,7 +228,6 @@ class TidySelect extends HTMLElement {
   position: relative;
   width: var(--width, 400px);
   background-color: #FFFFFF;
-  margin-bottom: 0.75em;
 }
 .open .ts-dropdown {
   box-shadow: none;
