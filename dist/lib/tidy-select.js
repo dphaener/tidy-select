@@ -39,11 +39,13 @@ class TidySelect extends HTMLElement {
         this.isOpen() ? this.close() : this.open();
     }
     open() {
+        var _a, _b;
         this.closeAll();
-        this.control.classList.add('open');
+        (_b = (_a = this.control) === null || _a === void 0 ? void 0 : _a.classList) === null || _b === void 0 ? void 0 : _b.add('open');
     }
     close() {
-        this.control.classList.remove('open');
+        var _a, _b;
+        (_b = (_a = this.control) === null || _a === void 0 ? void 0 : _a.classList) === null || _b === void 0 ? void 0 : _b.remove('open');
     }
     closeAll() {
         const allSelects = document.body.querySelectorAll('tidy-select');
@@ -168,7 +170,6 @@ class TidySelect extends HTMLElement {
   position: relative;
   width: var(--width, 400px);
   background-color: #FFFFFF;
-  margin-bottom: 0.75em;
 }
 .open .ts-dropdown {
   box-shadow: none;
