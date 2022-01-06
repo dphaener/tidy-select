@@ -66,11 +66,11 @@ class TidySelect extends HTMLElement {
 
   open() {
     this.closeAll();
-    this.control.classList.add('open');
+    this.control?.classList?.add('open');
   }
 
   close() {
-    this.control.classList.remove('open');
+    this.control?.classList?.remove('open');
   }
 
   closeAll() {
