@@ -158,6 +158,9 @@ class TidySelect extends HTMLElement {
     get name() {
         return this.getAttribute('name') || '';
     }
+    set name(value) {
+        this.setAttribute('name', value);
+    }
     get value() {
         return this.getAttribute('value') || '';
     }
