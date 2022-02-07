@@ -251,7 +251,7 @@ class TidySelect extends HTMLElement {
   border: 1px solid var(--border-color, gray);
   border-bottom-color: var(--border-color, gray);
   color: var(--color, darkgray);
-  font-size: 16px;
+  font-size: var(--input-font-size, 16px);
   line-height: var(--input-line-height, 16px);
   cursor: pointer;
 }
@@ -318,7 +318,7 @@ li.selected {
 .ts-description {
   display: block;
   padding-top: 4px;
-  font-size: 13px;
+  font-size: var(--description-font-size, 13px);
   color: #888;
 }
 .ts-current-value {

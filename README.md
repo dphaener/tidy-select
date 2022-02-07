@@ -19,3 +19,18 @@ Then you can use it in your HTML:
   <option value="2" data-description="I have a description">Two!</option>
 </tidy-select>
 ```
+
+## Styles
+
+Some styles can be customized using CSS variables:
+```css
+tidy-select {
+  --width: 50%;
+  --border-color: red;
+  --border-radius: 4px;
+  --input-padding: 1rem 1rem;
+  --input-line-height: 1.5rem;
+  --input-font-size: 1rem;
+  --description-font-size: 0.8rem;
+}
+```
