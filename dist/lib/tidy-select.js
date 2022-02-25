@@ -195,6 +195,9 @@ class TidySelect extends HTMLElement {
   font-size: var(--input-font-size, 16px);
   line-height: var(--input-line-height, 16px);
   cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .ts-dropdown::after {
   content: "";
