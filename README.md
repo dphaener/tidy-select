@@ -26,6 +26,7 @@ Some styles can be customized using CSS variables:
 ```css
 tidy-select {
   --width: 50%;
+  --arrow-color: gray;
   --border-color: red;
   --border-radius: 4px;
   --input-padding: 1rem 1rem;

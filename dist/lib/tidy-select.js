@@ -21,6 +21,7 @@ class TidySelect extends HTMLElement {
         this.createInput();
         this.createControl();
         this.element.appendChild(this.control);
+        this.setAttribute('tabindex', "0");
         this.applyCss();
         this.popover.addEventListener('click', this.stopPropagation);
         this.control.addEventListener('click', ev => this.toggle(ev));
@@ -208,7 +209,7 @@ class TidySelect extends HTMLElement {
   right: 12px;
   width: 0;
   height: 0;
-  border-top: 6px solid var(--border-color, gray);
+  border-top: 6px solid var(--arrow-color, gray);
   border-bottom: 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
