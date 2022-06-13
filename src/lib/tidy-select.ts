@@ -11,7 +11,7 @@ class TidySelect extends HTMLElement {
   constructor() {
     super();
 
-    this.element = this.attachShadow({mode: 'open'});
+    this.element = this.attachShadow({ mode: 'open' });
   }
 
   connectedCallback() {
@@ -26,7 +26,7 @@ class TidySelect extends HTMLElement {
 
       this.observer = new MutationObserver(() => this.reset());
       this.attachMutationObserver();
-      this.observer.observe(this, {childList: true, subtree: true});
+      this.observer.observe(this, { childList: true, subtree: true });
 
       document.querySelector('html')?.addEventListener('click', this.closeAll);
     }, 0);
@@ -232,7 +232,8 @@ class TidySelect extends HTMLElement {
 .ts-control {
   position: relative;
   width: var(--width, 400px);
-  background-color: #FFFFFF;
+  background-color: var(--background-color, #FFFFFF);
+  border-radius: var(--border-radius, 6px);
 }
 .open .ts-dropdown {
   box-shadow: none;
@@ -339,4 +340,4 @@ if (customElements.get('tidy-select') === undefined) {
   customElements.define('tidy-select', TidySelect);
 }
 
-export {TidySelect};
+export { TidySelect };

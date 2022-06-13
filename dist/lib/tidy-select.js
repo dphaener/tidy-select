@@ -173,7 +173,8 @@ class TidySelect extends HTMLElement {
 .ts-control {
   position: relative;
   width: var(--width, 400px);
-  background-color: #FFFFFF;
+  background-color: var(--background-color, #FFFFFF);
+  border-radius: var(--border-radius, 6px);
 }
 .open .ts-dropdown {
   box-shadow: none;
